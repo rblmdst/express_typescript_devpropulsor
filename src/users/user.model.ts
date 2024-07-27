@@ -1,6 +1,9 @@
+export type Department = "IT" | "Marketing" | "HR";
+export type Level = "J" | "M" | "S";
+
 export interface User {
   id: string;
   name: string;
-  department: "IT" | "Marketing" | "HR";
-  level: "J" | "M" | "S";
+  department: Department;
+  level: Level;
 }
