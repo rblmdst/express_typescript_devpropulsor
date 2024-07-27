@@ -31,3 +31,4 @@ npm run start:dev
 ### Branches :
 
 - `master` : project without any architecture
+- `architecture_3tier` : project with **3-tier** architecture (Controller, Service, Repository)
