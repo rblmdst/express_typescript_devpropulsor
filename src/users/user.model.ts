@@ -1,9 +1,9 @@
-export type Department = "IT" | "Marketing" | "HR";
-export type Level = "J" | "M" | "S";
+import { Schema, model } from "mongoose";
+import { User } from "./user.interface";
 
-export interface User {
-  id: string;
-  name: string;
-  department: Department;
-  level: Level;
-}
+const userSchema = new Schema<User>({
+  name: { type: String, required: true },
+  department: { type: String, required: true, enum: ["IT", "Marketing", "HR"] },
+  level: { type: String, required: true, enum: ["J", "M", "S"] },
+});
+export const UserModel = model<User>("user", userSchema);
