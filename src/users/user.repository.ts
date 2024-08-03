@@ -1,34 +1,23 @@
-import { User } from "./user.model";
-import { users as userList } from "./users";
-let users = [...userList];
-
-export interface UserRepository {
-  getAll: (department?: string) => User[];
-  getById: (userId: string) => User | null;
-  delete: (userId: string) => void;
-  create: (user: User) => void;
-}
+import { User } from "./user.interface";
+import { UserModel } from "./user.model";
+import { UserRepository } from "./user.repository.interface";
 
 export function userRepositoryFactory(): UserRepository {
   return {
-    getAll: (department?: string) => {
+    getAll: async (department?: string) => {
       if (department) {
-        return users.filter(
-          (user) =>
-            user.department.toLowerCase() ===
-            (department as string).toLowerCase()
-        );
+        return await UserModel.find({ department });
       }
-      return users;
+      return await UserModel.find();
     },
-    getById: (userId: string) => {
-      return users.find((user) => user.id === userId) || null;
+    getById: async (userId: string) => {
+      return await UserModel.findById(userId);
     },
-    delete: (userId: string) => {
-      users = users.filter((user) => user.id !== userId);
+    delete: async (userId: string) => {
+      await UserModel.deleteOne({ _id: userId });
     },
-    create: (user: User) => {
-      users = [...users, user];
+    create: async (user: Omit<User, "_id">) => {
+      return await UserModel.create(user);
     },
   };
 }
