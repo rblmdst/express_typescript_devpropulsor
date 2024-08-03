@@ -1,35 +1,46 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import { createValidator } from "@rblmdst/scheval";
+import { isValidObjectId } from "mongoose";
 
 export function userControllerFactory(userService: UserService) {
   return {
-    getAllUsers: (req: Request, res: Response) => {
+    getAllUsers: async (req: Request, res: Response) => {
       const { department } = req.query;
-      const users = userService.getUsers(department as string | undefined);
+      const users = await userService.getUsers(
+        department as string | undefined
+      );
       res.json(users);
     },
-    getUserById: (req: Request, res: Response) => {
+    getUserById: async (req: Request, res: Response) => {
       const { userId } = req.params;
-      const user = userService.getUser(userId);
+      if (!isValidObjectId(userId)) {
+        res.status(404);
+        return res.end();
+      }
+      const user = await userService.getUser(userId);
       if (user) {
         return res.json(user);
       }
       res.status(404);
       res.end();
     },
-    deteleUser: (req: Request, res: Response) => {
+    deteleUser: async (req: Request, res: Response) => {
       const { userId } = req.params;
-      const user = userService.getUser(userId);
+      if (!isValidObjectId(userId)) {
+        res.status(404);
+        return res.end();
+      }
+      const user = await userService.getUser(userId);
       if (!user) {
         res.status(404);
         return res.send();
       }
-      userService.deleteUser(userId);
+      await userService.deleteUser(userId);
       res.status(204);
       res.end();
     },
-    createUser: (req: Request, res: Response) => {
+    createUser: async (req: Request, res: Response) => {
       const { department, name, level } = req.body;
       const userData = { department, name, level };
       const validatorConfig = {
@@ -60,7 +71,7 @@ export function userControllerFactory(userService: UserService) {
         res.status(400);
         return res.json(validationErrors);
       }
-      const user = userService.createUser(userData);
+      const user = await userService.createUser(userData);
       res.status(201);
       return res.json(user);
     },

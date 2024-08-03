@@ -1,40 +1,39 @@
-import { Department, Level, User } from "./user.model";
-import { UserRepository } from "./user.repository";
+import { Department, Level, User } from "./user.interface";
+import { UserRepository } from "./user.repository.interface";
 
 export interface UserService {
-  getUsers: (department?: string) => User[];
-  getUser: (userId: string) => User | null;
-  deleteUser: (userId: string) => void;
+  getUsers: (department?: string) => Promise<User[]>;
+  getUser: (userId: string) => Promise<User | null>;
+  deleteUser: (userId: string) => Promise<void>;
   createUser: (userData: {
     department: Department;
     name: string;
     level: Level;
-  }) => User | null;
+  }) => Promise<User | null>;
 }
 
 export function userServiceFactory(
   userRepository: UserRepository
 ): UserService {
   return {
-    getUsers: (department?: string) => {
-      return userRepository.getAll(department);
+    getUsers: async (department?: string) => {
+      return await userRepository.getAll(department);
     },
-    getUser: (userId: string) => {
-      return userRepository.getById(userId);
+    getUser: async (userId: string) => {
+      return await userRepository.getById(userId);
     },
-    deleteUser: (userId: string) => {
-      userRepository.delete(userId);
+    deleteUser: async (userId: string) => {
+      await userRepository.delete(userId);
     },
-    createUser: (userData: {
+    createUser: async (userData: {
       department: Department;
       name: string;
       level: Level;
     }) => {
-      const id: string = crypto.randomUUID();
       const { department, name, level } = userData;
-      const user = { id, department, name, level };
-      userRepository.create(user);
-      return userRepository.getById(id);
+      const user = { department, name, level };
+      const newUser = await userRepository.create(user);
+      return newUser;
     },
   };
 }
