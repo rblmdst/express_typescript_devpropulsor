@@ -2,7 +2,7 @@ A small project to show how to create from scratch a Rest API based on **Express
 
 This project is related to a series of videos (in French) to learn **Express** from scratch.
 
-You can check the complete playlist (videos are in French) on my YouTube channel for step-by-step tutorials to get there from scratch.
+You can check the complete playlist (videos are in French) on my YouTube channel (**Dev Propulsor**) for step-by-step tutorials to get there from scratch.
 
 ### Install dependencies
 
@@ -32,3 +32,4 @@ npm run start:dev
 
 - `master` : project without any architecture
 - `architecture_3tier` : project with **3-tier** architecture (Controller, Service, Repository)
+- `crud__mongoose` : save data into **MongoDB** using **Mongoose** as ODM.
