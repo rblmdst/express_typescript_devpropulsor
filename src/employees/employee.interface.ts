@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 export type Department = "IT" | "Marketing" | "HR";
 export type Level = "J" | "M" | "S";
 
-export interface User {
+export interface Employee {
   _id: Types.ObjectId;
   name: string;
   department: Department;
