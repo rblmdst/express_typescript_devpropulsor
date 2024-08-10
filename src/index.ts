@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { userRouter } from "./users/user.routes";
+import { employeeRouter } from "./employees/employee.routes";
 import { errorHandler } from "./error.middleware";
 import { connectDb } from "./db";
 
@@ -16,7 +16,7 @@ const main = async (config: { PORT: number; DB_URI: string }) => {
 
   const app = express();
 
-  app.use("/users", userRouter);
+  app.use("/employees", employeeRouter);
 
   app.get("/", (req: Request, res: Response) => {
     res.end("OK");
