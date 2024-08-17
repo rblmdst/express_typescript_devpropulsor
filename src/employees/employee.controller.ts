@@ -36,12 +36,22 @@ export function employeeControllerFactory(employeeService: EmployeeService) {
         res.status(404);
         return res.send();
       }
+      const connectedUserId = (req as any).user._id;
+      if (employee.createdBy?.toString() !== connectedUserId) {
+        return res
+          .status(403)
+          .json({
+            error: "Only creator of an employee can delete that employee.",
+          });
+      }
       await employeeService.deleteEmployee(employeeId);
       res.status(204);
       res.end();
     },
     createEmployee: async (req: Request, res: Response) => {
       const { department, name, level } = req.body;
+      const connectedUserId = (req as any).user._id;
+
       const employeeData = { department, name, level };
       const validatorConfig = {
         department: {
@@ -71,7 +81,10 @@ export function employeeControllerFactory(employeeService: EmployeeService) {
         res.status(400);
         return res.json(validationErrors);
       }
-      const employee = await employeeService.createEmployee(employeeData);
+      const employee = await employeeService.createEmployee(
+        employeeData,
+        connectedUserId
+      );
       res.status(201);
       return res.json(employee);
     },
