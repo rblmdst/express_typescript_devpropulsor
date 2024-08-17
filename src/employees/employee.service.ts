@@ -5,11 +5,14 @@ export interface EmployeeService {
   getEmployees: (department?: string) => Promise<Employee[]>;
   getEmployee: (employeeId: string) => Promise<Employee | null>;
   deleteEmployee: (employeeId: string) => Promise<void>;
-  createEmployee: (employeeData: {
-    department: Department;
-    name: string;
-    level: Level;
-  }) => Promise<Employee | null>;
+  createEmployee: (
+    employeeData: {
+      department: Department;
+      name: string;
+      level: Level;
+    },
+    creatorId: string
+  ) => Promise<Employee | null>;
 }
 
 export function employeeServiceFactory(
@@ -25,14 +28,17 @@ export function employeeServiceFactory(
     deleteEmployee: async (employeeId: string) => {
       await employeeRepository.delete(employeeId);
     },
-    createEmployee: async (employeeData: {
-      department: Department;
-      name: string;
-      level: Level;
-    }) => {
+    createEmployee: async (
+      employeeData: {
+        department: Department;
+        name: string;
+        level: Level;
+      },
+      creatorId: string
+    ) => {
       const { department, name, level } = employeeData;
       const employee = { department, name, level };
-      const newEmployee = await employeeRepository.create(employee);
+      const newEmployee = await employeeRepository.create(employee, creatorId);
       return newEmployee;
     },
   };
