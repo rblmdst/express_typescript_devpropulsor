@@ -8,4 +8,5 @@ export interface Employee {
   name: string;
   department: Department;
   level: Level;
+  createdBy?: Types.ObjectId;
 }
