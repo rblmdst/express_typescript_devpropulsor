@@ -16,8 +16,8 @@ export function employeeRepositoryFactory(): EmployeeRepository {
     delete: async (employeeId: string) => {
       await EmployeeModel.deleteOne({ _id: employeeId });
     },
-    create: async (employee: Omit<Employee, "_id">) => {
-      return await EmployeeModel.create(employee);
+    create: async (employee: Omit<Employee, "_id">, creatorId: string) => {
+      return await EmployeeModel.create({ ...employee, createdBy: creatorId });
     },
   };
 }
