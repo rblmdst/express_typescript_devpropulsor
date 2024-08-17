@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { employeeRouter } from "./employees/employee.routes";
 import { errorHandler } from "./error.middleware";
 import { connectDb } from "./db";
+import { authRouter } from "./authentication/auth.routes";
+import { authMiddleware } from "./authentication/auth.middleware";
 
 const main = async (config: { PORT: number; DB_URI: string }) => {
   const { PORT, DB_URI } = config;
@@ -16,7 +18,8 @@ const main = async (config: { PORT: number; DB_URI: string }) => {
 
   const app = express();
 
-  app.use("/employees", employeeRouter);
+  app.use("/employees", authMiddleware, employeeRouter);
+  app.use("/auth", authRouter);
 
   app.get("/", (req: Request, res: Response) => {
     res.end("OK");
