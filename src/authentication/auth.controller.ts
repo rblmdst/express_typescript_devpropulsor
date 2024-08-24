@@ -1,7 +1,8 @@
 import { createValidator } from "@rblmdst/scheval";
 import { Request, Response } from "express";
-import { passwordPattern } from "../const";
-import { UserService } from "../users/use.service";
+import { passwordPattern } from "../core/const";
+import { UserService } from "../users/user.service";
+import { ConfigService } from "../core/services/configuration.service";
 
 export const authControllerFactory = (userService: UserService) => {
   return {
