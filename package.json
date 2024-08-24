@@ -6,8 +6,9 @@
   "scripts": {
     "build": "tsc",
     "build:dev": "tsc -w",
-    "start": "node dist-server/index.js",
-    "start:dev": "node --watch dist-server/index.js"
+    "start:dev": "node --env-file=.development.env dist-server/index.js",
+    "start:prod": "node --env-file=.production.env dist-server/index.js",
+    "start:dev:w": "node --watch dist-server/index.js"
   },
   "keywords": [],
   "author": "",
