@@ -1,12 +1,17 @@
 import express, { Request, Response } from "express";
 import { employeeRouter } from "./employees/employee.routes";
-import { errorHandler } from "./error.middleware";
-import { connectDb } from "./db";
-import { authRouter } from "./authentication/auth.routes";
-import { authMiddleware } from "./authentication/auth.middleware";
+import { errorHandler } from "./core/middlewares/error.middleware";
+import { connectDb } from "./core/db";
+import { authRouterFactory } from "./authentication/auth.routes";
+import { createAuthMiddlewareFactory } from "./authentication/auth.middleware";
+import {
+  ConfigService,
+  createConfigServiceFactory,
+} from "./core/services/configuration.service";
 
-const main = async (config: { PORT: number; DB_URI: string }) => {
-  const { PORT, DB_URI } = config;
+const main = async (configService: ConfigService) => {
+  const PORT = configService.get("port") as number;
+  const DB_URI = configService.get("dbUri") as string;
 
   try {
     await connectDb(DB_URI);
@@ -18,8 +23,12 @@ const main = async (config: { PORT: number; DB_URI: string }) => {
 
   const app = express();
 
-  app.use("/employees", authMiddleware, employeeRouter);
-  app.use("/auth", authRouter);
+  app.use(
+    "/employees",
+    createAuthMiddlewareFactory(configService),
+    employeeRouter
+  );
+  app.use("/auth", authRouterFactory(configService));
 
   app.get("/", (req: Request, res: Response) => {
     res.end("OK");
@@ -31,11 +40,10 @@ const main = async (config: { PORT: number; DB_URI: string }) => {
   });
 };
 
-const PORT = 3000;
-const DB_URI = "mongodb://127.0.0.1:27017/test_db";
-const config = { PORT, DB_URI };
+const configService = createConfigServiceFactory();
+
 // boostrap
-main(config).catch((err) => {
+main(configService).catch((err) => {
   console.log("Error during bootstraping");
   console.log(err);
   process.exit(1);
