@@ -1,10 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const saltRounds = 10;
-export const secret = "a3#uezuop";
-
-export const hashPassword = (plainText: string) => {
+export const hashPassword = (plainText: string, saltRounds: number) => {
   return bcrypt.hash(plainText, saltRounds);
 };
 
