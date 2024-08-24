@@ -2,8 +2,8 @@ import {
   checkPassword,
   generateJWT,
   hashPassword,
-  secret,
 } from "../authentication/utils";
+import { ConfigService } from "../core/services/configuration.service";
 import { NewCreatedUser, User } from "./user.interface";
 import { UserRepository } from "./user.repository.interface";
 
@@ -15,12 +15,17 @@ export interface UserService {
 }
 
 export const userServiceFactory: (
-  userRepository: UserRepository
-) => UserService = (userRepository: UserRepository) => {
+  userRepository: UserRepository,
+  configService: ConfigService
+) => UserService = (
+  userRepository: UserRepository,
+  configService: ConfigService
+) => {
   return {
     registerUser: async (user: Omit<User, "_id">) => {
       try {
-        const hasedPassword = await hashPassword(user.password);
+        const saltRounds = configService.get("saltRounds") as number;
+        const hasedPassword = await hashPassword(user.password, saltRounds);
         const newUser = await userRepository.create({
           ...user,
           password: hasedPassword,
@@ -41,8 +46,8 @@ export const userServiceFactory: (
     generateAuthToken: (user: User) => {
       const { email, firstName, lastName, _id } = user;
       const payload = { email, firstName, lastName, _id };
-      const ttl = "4m";
-      // const secret = "a3#uezuop";
+      const ttl = configService.get("jwtTTL") as string | number;
+      const secret = configService.get("jwtSecret") as string;
       const options = {
         payload,
         secret,
