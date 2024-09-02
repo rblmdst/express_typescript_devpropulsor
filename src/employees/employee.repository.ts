@@ -1,8 +1,10 @@
 import { Employee } from "./employee.interface";
-import { EmployeeModel } from "./employee.model";
+import { EmployeeModelType } from "./employee.model";
 import { EmployeeRepository } from "./employee.repository.interface";
 
-export function employeeRepositoryFactory(): EmployeeRepository {
+export function employeeRepositoryFactory(
+  EmployeeModel: EmployeeModelType
+): EmployeeRepository {
   return {
     getAll: async (department?: string) => {
       if (department) {
