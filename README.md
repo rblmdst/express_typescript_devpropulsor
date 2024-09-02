@@ -34,3 +34,4 @@ npm run start:dev
 - `architecture_3tier` : project with **3-tier** architecture (Controller, Service, Repository)
 - `crud__mongoose` : save data into **MongoDB** using **Mongoose** as ODM.
 - `jwt_authentication` : JWT Authentication - Registration, Auhentication and Authorization.
+- `deploy_ready_with_env_vars` : Make application production ready using environment variables.
