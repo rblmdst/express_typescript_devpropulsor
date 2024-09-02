@@ -8,3 +8,4 @@ const employeeSchema = new Schema<Employee>({
   createdBy: { type: Schema.ObjectId, ref: "User" },
 });
 export const EmployeeModel = model<Employee>("employee", employeeSchema);
+export type EmployeeModelType = typeof EmployeeModel;
