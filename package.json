@@ -8,7 +8,8 @@
     "build:dev": "tsc -w",
     "start:dev": "node --env-file=.development.env dist-server/index.js",
     "start:prod": "node --env-file=.production.env dist-server/index.js",
-    "start:dev:w": "node --watch dist-server/index.js"
+    "start:dev:w": "node --watch dist-server/index.js",
+    "test": "node --test dist-server"
   },
   "keywords": [],
   "author": "",
