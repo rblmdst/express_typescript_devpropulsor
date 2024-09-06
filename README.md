@@ -36,3 +36,4 @@ npm run start:dev
 - `jwt_authentication` : JWT Authentication - Registration, Auhentication and Authorization.
 - `deploy_ready_with_env_vars` : Make application production ready using environment variables.
 - `unit_test` : Unit test the 3-tier architecture layers (Controller, Service, Repository).
+- `integration_test` : Integration test using **Supertest**.
