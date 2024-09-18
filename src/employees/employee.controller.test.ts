@@ -40,7 +40,11 @@ describe("EmployeeController", () => {
     };
     // Case 1 : (without department)
     // Act
-    await employeeController.getAllEmployees(reqWithoutDepartment, res);
+    await employeeController.getAllEmployees(
+      reqWithoutDepartment,
+      res,
+      () => {}
+    );
     // Assert
     assert.equal(getEmployees.mock.callCount(), 1);
     assert.deepEqual(getEmployees.mock.calls[0].arguments, [undefined]);
@@ -50,7 +54,7 @@ describe("EmployeeController", () => {
 
     // Case 2 : (with department)
     // Act
-    await employeeController.getAllEmployees(reqWithDepartment, res);
+    await employeeController.getAllEmployees(reqWithDepartment, res, () => {});
     // Assert
     assert.equal(getEmployees.mock.callCount(), 2);
     assert.deepEqual(getEmployees.mock.calls[1].arguments, ["IT"]);
@@ -93,7 +97,7 @@ describe("EmployeeController", () => {
     };
 
     // Act
-    await employeeController.getEmployeeById(req1, res);
+    await employeeController.getEmployeeById(req1, res, () => {});
 
     // Assert
     assert.equal(statusSpy.mock.callCount(), 1);
@@ -101,7 +105,7 @@ describe("EmployeeController", () => {
     assert.equal(endSpy.mock.callCount(), 1);
 
     // Act
-    await employeeController.getEmployeeById(req2, res);
+    await employeeController.getEmployeeById(req2, res, () => {});
 
     // Assert
     assert.equal(jsonSpy.mock.callCount(), 1);
