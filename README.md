@@ -37,3 +37,4 @@ npm run start:dev
 - `deploy_ready_with_env_vars` : Make application production ready using environment variables.
 - `unit_test` : Unit test the 3-tier architecture layers (Controller, Service, Repository).
 - `integration_test` : Integration test using **Supertest**.
+- `error_handling__gracefully_shutdown` : Properly handle uncaught error/exception and Gracefully shutdown.
