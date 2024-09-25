@@ -10,10 +10,14 @@ import mongoose from "mongoose";
 let server: Server;
 const main = async (configService: ConfigService) => {
   const PORT = configService.get("port") as number;
-  const DB_URI = configService.get("dbUri") as string;
+  const dbUri = configService.get("dbUri") as string;
+  const dbName = configService.get("dbName") as string;
+  const user = configService.get("dbUsername") as string;
+  const pass = configService.get("dbPassword") as string;
 
+  const connectOptions = { dbName, user, pass };
   try {
-    await connectDb(DB_URI);
+    await connectDb(dbUri, connectOptions);
   } catch (error) {
     console.log("Error during connection to DB");
     console.log(error);

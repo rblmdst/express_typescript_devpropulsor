@@ -1,0 +1,53 @@
+services:
+  api-server:
+    container_name: "api-server"
+    build:
+      context: .
+      dockerfile: ./.docker/server.dockerfile
+    env_file:
+      - ./.docker/env/.api-server.env
+    ports:
+      - 8000:5000
+    networks:
+      app-network:
+        aliases:
+          - apihost
+    restart: always
+    depends_on:
+      - db-server
+  db-server:
+    container_name: "db-server"
+    image: "mongo:7.0.12"
+    restart: "always"
+    env_file:
+      - ./.docker/env/.db-server.env
+    ports:
+      - 27017:27017
+    networks:
+      app-network:
+        aliases:
+          - dbhost
+    volumes:
+      - type: volume
+        source: db_data
+        target: /data/db
+  web-server:
+    image: nginx-reverse-proxy
+    build:
+      context: .
+      dockerfile: .docker/web-server.dockerfile
+    ports:
+      - 80:80
+    networks:
+      app-network:
+        aliases:
+          - webhost
+    depends_on:
+      - api-server
+      - db-server
+volumes:
+  db_data:
+
+networks:
+  app-network:
+    driver: bridge
