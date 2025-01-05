@@ -81,8 +81,9 @@ export const authControllerFactory = (userService: UserService) => {
           return res.status(401).json({ error: "Invalid credentials" });
         }
         const token = await userService.generateAuthToken(user);
-
-        return res.status(200).json({ token });
+        const { firstName, lastName, _id } = user;
+        const userInfos = { firstName, lastName, _id, email };
+        return res.status(200).json({ token, user: userInfos });
       }
     ),
   };

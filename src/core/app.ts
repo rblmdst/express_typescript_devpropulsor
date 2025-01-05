@@ -4,9 +4,10 @@ import express, { Request, Response } from "express";
 import { employeeRouter } from "../employees/employee.routes";
 import { errorHandler } from "../core/middlewares/error.middleware";
 import { ConfigService } from "./services/configuration.service";
-
+import cors from "cors";
 export const createApp = (configService: ConfigService) => {
   const app = express();
+  app.use(cors());
   app.use(
     "/employees",
     createAuthMiddlewareFactory(configService),
